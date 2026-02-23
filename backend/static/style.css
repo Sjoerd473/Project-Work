@@ -1,0 +1,10 @@
+:root {
+    background-color: rebeccapurple;
+}
+
+p{
+    position:absolute;
+    inset:0;
+    margin:auto;
+    font-size:3rem;
+}

@@ -1,0 +1,38 @@
+{
+  "manifest_version": 3,
+  "name": "AI Usage Meter",
+  "version": "0.1.0",
+  "description": "Measures anonymous AI prompt usage across major AI sites.",
+  "permissions": [
+    "scripting",
+    "storage",
+    "activeTab"
+  ],
+  "host_permissions": [
+    "https://chat.openai.com/*",
+    "https://chatgpt.com/*",
+    "https://claude.ai/*",
+    "https://gemini.google.com/*",
+    "https://www.perplexity.ai/*",
+    "http://localhost:8000/*"
+  ],
+  "background": {
+    "service_worker": "src/background/background.js",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://chat.openai.com/*",
+        "https://chatgpt.com/*",
+        "https://claude.ai/*",
+        "https://gemini.google.com/*",
+        "https://www.perplexity.ai/*"
+      ],
+      "js": [
+        "src/content/content.js"
+      ],
+      "run_at": "document_idle"
+    }
+  ]
+}
