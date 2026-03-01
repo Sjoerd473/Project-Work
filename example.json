@@ -1,0 +1,55 @@
+{
+    "schema_version": 1,
+    "timestamp": "2026-03-01T14:21:38.590Z",
+    "user": {
+        "user_id": "32612bd63857f07f135f5a6656f5352d664054bfedb758e6f6e974db309fecf4"
+    },
+    "session": {
+        "session_id": "ef4ee15fe0c4a0adc089321ac5c77612",
+        "session_start": "2026-03-01T14:05:03.902Z",
+        "session_prompt_count": 6,
+        "session_duration_ms": 989455,
+        "time_since_last_prompt_ms": 52311
+    },
+    "prompt": {
+        "text_length": 29,
+        "tokens_in": 8,
+        "prompt_type": "question",
+        "domain": "general",
+        "language": "en",
+        "is_followup": false,
+        "message_index": 0,
+        "conversation_length": 0,
+        "safety_category": null
+    },
+    "response": {
+        "tokens_out": 52,
+        "characters_out": 199,
+        "latency_ms": 3013.3000000000466,
+        "streaming_duration_ms": 200.0999999998603
+    },
+    "model": {
+        "model_name": "gpt-4o",
+        "model_mode": "text"
+    },
+    "ui_interaction": {
+        "regenerate_used": false,
+        "suggested_prompt_used": false,
+        "image_attached": false,
+        "file_attached": false,
+        "voice_input": null,
+        "tool_active": false
+    },
+    "environment": {
+        "browser_name": "chrome",
+        "browser_version": "145",
+        "os": "windows",
+        "viewport_category": "tablet",
+        "timezone_offset_minutes": -60,
+        "extension_version": "0.1.0"
+    },
+    "source": "chatgpt",
+    "conversation_id": null,
+    "user_id": "32612bd63857f07f135f5a6656f5352d664054bfedb758e6f6e974db309fecf4",
+    "session_id": "ef4ee15fe0c4a0adc089321ac5c77612"
+}
