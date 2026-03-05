@@ -134,23 +134,52 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
 // =========================
 //  PROMPT EVENT INGESTION
 // =========================
+const SECRET_KEY = "super_secret_key_here";
+
+async function computeHMAC(payloadString, keyString) {
+    const encoder = new TextEncoder();
+    const keyBytes = encoder.encode(keyString);
+    const payloadBytes = encoder.encode(payloadString);
+
+    const cryptoKey = await crypto.subtle.importKey(
+        "raw",
+        keyBytes,
+        { name: "HMAC", hash: "SHA-256" },
+        false,
+        ["sign"]
+    );
+
+    const signature = await crypto.subtle.sign("HMAC", cryptoKey, payloadBytes);
+
+    return [...new Uint8Array(signature)]
+        .map(b => b.toString(16).padStart(2, "0"))
+        .join("");
+}
+
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
     if (msg.type === "PROMPT_EVENT") {
         const payload = msg.payload;
+        const payloadString = JSON.stringify(payload);
 
         console.log("[AI Usage Meter] Prompt event received:", payload);
 
-        fetch("http://localhost:8000/events", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(payload)
-        })
-            .then(res => res.text())
-            .then(data => console.log("[AI Usage Meter] Server response:", data))
-            .catch(err => console.error("[AI Usage Meter] Failed to send:", err));
+        computeHMAC(payloadString, SECRET_KEY).then(signature => {
+            fetch("http://localhost:8000/events", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-Signature": signature
+                },
+                body: payloadString
+            })
+                .then(res => res.text())
+                .then(data => console.log("[AI Usage Meter] Server response:", data))
+                .catch(err => console.error("[AI Usage Meter] Failed to send:", err));
+        });
 
         sendResponse({ status: "ok" });
     }
 });
+
 
 console.log("[AI Usage Meter] Background service worker loaded");
