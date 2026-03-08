@@ -568,8 +568,20 @@ class ChatGPTDetector {
     }
     // generate a conversationID
     getConversationId() {
+        // First, check for query parameter (backward compatibility)
         const urlParams = new URLSearchParams(location.search);
-        return urlParams.get('conversationId') || 'unknown';
+        let convId = urlParams.get('conversationId');
+
+        // If not found, extract from path: /c/<uuid> using regex
+        if (!convId) {
+            const pathMatch = location.pathname.match(/^\/c\/([a-f0-9\-]+)$/);
+            if (pathMatch) {
+                // pathMatch[0] would include the /c/ at the start
+                convId = pathMatch[1];
+            }
+        }
+
+        return convId || 'unknown';
     }
     // read some data on the clients environment
     getClientEnvironment() {
@@ -599,7 +611,9 @@ class ChatGPTDetector {
         else if (ua.includes("Linux")) os = "Linux";
 
         // Viewport and timezone
+        //// viewport needs to be converted to a string of mobile/tablet/desktop
         const viewport = `${window.innerWidth}x${window.innerHeight}`;
+        //// timezone is currently a number, needs to be converted to a region EU/US/ASIA based on the number
         const timezone = -new Date().getTimezoneOffset(); // convert to positive offset
 
         return {
